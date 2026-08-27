@@ -74,7 +74,8 @@ public class ListDemo
         }
 
         //where did gogol live when he was a little boy
-        //what did gogol remember after his first day with moushumi
+        //what did gogol remember after his first date with moushumi
+        //
         
         /*ConcurrentModificationExcpetion 
         
