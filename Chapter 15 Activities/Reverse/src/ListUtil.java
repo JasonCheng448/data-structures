@@ -21,8 +21,22 @@ public class ListUtil
             String x = iterator.previous();
             temp.add(x);
         }
+
+        while (iterator.hasNext()){
+            iterator.next();
+            iterator.remove();
+        }
         
-        //clear strings, then copy everything over from temp to it
+        ListIterator<String> tempIterator = temp.listIterator();
+
+        while (tempIterator.hasNext()){
+            String x = tempIterator.next();
+            strings.add(x);
+        }
+
+
+
+        
         
 
     }
