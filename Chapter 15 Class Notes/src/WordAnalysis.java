@@ -19,7 +19,6 @@ public class WordAnalysis
         Set<String> novelWords = readWords("data-structures/Chapter 15 Class Notes/src/war-and-peace.txt");
 
         //Printn all thew ords that are in the novel, but not the dictionary
-
         for (String word: novelWords){
             if (!dictionaryWords.contains(word)){
                 System.out.println(word);

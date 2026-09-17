@@ -10,9 +10,16 @@ public class SudokuSolver {
     private ArrayList<Set<Integer>> cols;
     private ArrayList<Set<Integer>> squares;
     private Set<Integer> nums;
+    
 
     public SudokuSolver(String fileName) {
         // read the puzzle file
+
+        this.rows = new ArrayList<>();
+        this.cols = new ArrayList<>();
+        this.squares = new ArrayList<>();
+        this.nums = new HashSet<>();
+
         try (Scanner in = new Scanner(new File(fileName))) {
 
             this.grid = new int[N][N];
@@ -37,10 +44,24 @@ public class SudokuSolver {
 
         // create the list of sets for each row (this.rows)
         // ...
-
+        for (int i = 0; i < 9; i++) {
+            Set<Integer> rowsA = new HashSet<>();
+            for (int j = 0; j < 9; j++) {
+                rowsA.add(grid[i][j]);
+            }
+            this.rows.add(rowsA);
+        }
         // create the list of sets for each col (this.cols)
         // ...
-
+        for (int i = 0; i < 9; i++) {
+            Set<Integer> colsA = new HashSet<>();
+            for (int j = 0; j < 9; j++) {
+                colsA.add(grid[j][i]);
+            }
+            this.cols.add(colsA);
+        }
+        System.out.println(rows);
+        System.out.println(cols);
         // create the list of sets for each square (this.squares)
         /* the squares are added to the list row-by-row:
             0 1 2
@@ -48,9 +69,25 @@ public class SudokuSolver {
             6 7 8
          */
         // ...
-
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++){
+                Set<Integer> squaresA = new HashSet<>();
+                    for (int a = i*3; a < i*3 + 3; a++){
+                        for (int b = j*3; b < j*3 + 3; b++){
+                            squaresA.add(grid[a][b]);
+                        }
+                    }
+                    this.squares.add(squaresA);
+                 
+            }
+        }
+        System.out.println(squares);
         // create a hash set for [1..9] (this.nums)
         // ...
+        for (int i = 1; i < 10; i++){
+            this.nums.add(i);
+        }
+            
 
         // visually inspect that all the sets are correct
         for (int row = 0; row < N; row++) {
@@ -94,10 +131,16 @@ public class SudokuSolver {
             Properly indexing the squares list of sets is tricky. Verify that your
             algorithm is correct.
          */
+
+         
+
         Set<Integer> possibleNums = new HashSet<Integer>();
         possibleNums.addAll(this.nums);
         
-        // ...
+        // 
+        possibleNums.removeAll(this.rows.get(nextRow));
+        possibleNums.removeAll(this.cols.get(nextCol));
+        possibleNums.removeAll(this.squares.get(mapCellToSquare(nextRow, nextCol)));
 
         // if there are no possible numbers, we cannot solve the board in its current state
         if (possibleNums.isEmpty()) {
@@ -107,7 +150,10 @@ public class SudokuSolver {
         // try each possible number
         for (Integer possibleNum : possibleNums) {
             // update the grid and all three corresponding sets with possibleNum
-            // ...
+            grid[nextRow][nextCol] = possibleNum;
+            this.rows.get(nextRow).add(possibleNum);
+            this.cols.get(nextCol).add(possibleNum);
+            this.squares.get(mapCellToSquare(nextRow, nextCol)).add(possibleNum);
 
             // recursively solve the board
             if (this.solve()) {
@@ -120,6 +166,14 @@ public class SudokuSolver {
                  sets.
                  */
                 // ...
+                
+                grid[nextRow][nextCol] = 0;
+
+                this.rows.get(nextRow).remove(possibleNum);
+                this.cols.get(nextCol).remove(possibleNum);
+                this.squares.get(mapCellToSquare(nextRow, nextCol)).remove(possibleNum);
+                
+
             }
         }
 
@@ -149,11 +203,14 @@ public class SudokuSolver {
 
         // ...
 
-        return 0;
+        int bigRow = row/3;
+        int bigCol = col/3;
+
+        return bigRow * 3 + bigCol;
     }
 
     public static void main(String[] args) {
-        String fileName = "src/puzzle1.txt";
+        String fileName = "Chapter 15 Activities/Sudoku/src/puzzle1.txt";
 
         SudokuSolver solver = new SudokuSolver(fileName);
         System.out.println(solver);

@@ -19,6 +19,8 @@ public class ListDemo
         
         //The list is currently TSWD
 
+
+        
         /*
         the listterator method creates a new list iterator tha tis positioned at the head of the list. the | is used to represnet hte iterator position */
         //|TSWD
