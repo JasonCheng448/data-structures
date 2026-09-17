@@ -16,22 +16,40 @@ public class Sieve
     static ArrayList<Integer> primes = new ArrayList<>();
     public static void main(String[] args)
     {
+        /**Scanner in = new Scanner(System.in);
+        System.out.println("Compute primes up to which integer?");
+        int n = in.nextInt();
         Scanner in = new Scanner(System.in);
         System.out.println("Compute primes up to which integer?");
         int n = in.nextInt();
-        
 
         // Your work goes here
         int cap = n;
-
 
         for (int i = 2; i <= cap; i++){
             nums.add(i);
         }
 
         System.out.print(sieve(2));
-        
-        
+
+        nums.clear();
+        for (int i = 0; i < newNums.size(); i++){
+            nums.add(newNums.get(i));
+        }
+
+        nums.clear();
+        for (int i = 0; i < newNums.size(); i++){
+            nums.add(newNums.get(i));
+        }
+
+        if (nums.size() == 0)
+        {return primes;}
+        else{
+            sieve(nums.get(0));
+
+        }
+
+        return primes;
     }
 
     public static ArrayList<Integer>  sieve(int n)
