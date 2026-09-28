@@ -1,3 +1,4 @@
+import java.nio.channels.IllegalSelectorException;
 import java.util.NoSuchElementException;
 
 /**
@@ -8,11 +9,16 @@ import java.util.NoSuchElementException;
 */
 public class LinkedList
 {
-
-
+    //first refers to the head (first Node) of the list
+    //if the list is empty, first will be null
+    private Node first;
     /**
         Constructs an empty linked list.
     */
+
+    public LinkedList(){
+        this.first = null;
+    }
 
 
 
@@ -30,6 +36,15 @@ public class LinkedList
         @return the removed element
     */
 
+    public Object removeFirst(){
+        if (this.first == null){
+            throw new NoSuchElementException();
+        }
+        Object element = this.first.data;
+        this.first = this.first.next;
+        return element;
+    }
+
 
 
 
@@ -38,6 +53,13 @@ public class LinkedList
         Adds an element to the front of the linked list.
         @param element the element to add
     */
+
+    public void addFirst(Object element){
+        Node newNode = new Node();
+        newNode.data = element;
+        newNode.next = first;
+        this.first = newNode;
+    }
 
 
 
@@ -53,11 +75,21 @@ public class LinkedList
 
 
     //Class Node
+    //Node is static because it does nOT need to access anything in LinkedList
+    //The Node object will store info, not interact
+    static class Node {
+        public Object data;
+        public Node next;
+    }
 
 
-    class LinkedListIterator //implements ListIterator
+    class LinkedListIterator implements ListIterator
     {
       //private data
+      private Node position;
+      private Node previous;
+      private boolean isAfterNext;
+
 
 
         /**
@@ -65,11 +97,38 @@ public class LinkedList
             of the linked list.
         */
 
+        public LinkedListIterator(){
+            position =  null;
+            previous = null;
+            isAfterNext = false;
+        }
+
 
         /**
             Moves the iterator past the next element.
             @return the traversed element
         */
+
+        public Object next(){
+            if (!hasNext()){
+                throw new NoSuchElementException();
+            }
+
+            if (position == null){
+                position = first;
+            }
+            else{
+                previous = position;
+                position = position.next;
+                
+            }
+
+            isAfterNext = true;
+
+            return position.next;
+        }
+
+        
 
 
 
@@ -80,12 +139,45 @@ public class LinkedList
             @return true if there is an element after the iterator position
         */
 
+        public boolean hasNext(){
+            //check if the list is empty if the iterator hasn't moved
+            if (position == null){
+                return first != null;
+            }
+
+            //if we get past the if statement, we nkow the iterator has moved, so check the next node
+            return position.next != null;
+
+
+        }
+
 
         /**
             Adds an element before the iterator position
             and moves the iterator past the inserted element.
             @param element the element to add
         */
+
+            public void add(Object element){
+                //check if the iterator is at the beginning
+                if (position == null){
+                    addFirst(element);
+                    position = first;
+                }
+                else{
+                    //the iterator has moved at some point
+                    Node newNode = new Node();
+                    newNode.data = element;
+                    newNode.next = position.next;
+
+                    //set the next element of the CURRENT position to point to our new node
+                    position.next = newNode;
+                    position = newNode;
+
+                }
+
+                isAfterNext = false;
+            }
 
 
 
@@ -96,6 +188,26 @@ public class LinkedList
             Removes the last traversed element. This method may
             only be called after a call to the next() method.
         */
+
+        public void remove(){
+            if (!isAfterNext){
+                throw new IllegalStateException();
+            }
+
+            //check if hte iterator it at the beginning
+
+            if (position == first){
+                removeFirst();
+                position = null;
+            }
+
+            else{
+                previous.next = position.next;
+                position = previous;
+            }
+
+            isAfterNext = false;
+        }
 
 
 
