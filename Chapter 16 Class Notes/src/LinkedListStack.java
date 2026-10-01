@@ -10,6 +10,8 @@ public class LinkedListStack
     /**
      * Constructs an empty stack.
     */
+
+    
     public LinkedListStack()
     {
         first = null;
@@ -19,7 +21,22 @@ public class LinkedListStack
      * Adds an element to the top of the stack.
      *
      * @param element the element to add
+     * 
+     * 
     */
+
+    public void add(Object obj){
+        if (first == null){
+            first.data = obj;
+        }
+        else{
+            Node current = first;
+            while (current.next != null){
+                current = current.next;
+            }
+            current.next.data = obj;
+        }
+    }
 
 
 
